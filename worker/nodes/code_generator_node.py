@@ -1,3 +1,4 @@
+from loguru import logger
 import json
 from schema.state_schema import VideoStatus, AgentState
 from schema.code_generator.code_generator_schema import CodeGenerationSchema
@@ -8,7 +9,7 @@ llm_service = LLMService()
 
 def code_generator_node(state: AgentState) -> dict:
     prompt = state.prompt if state.prompt else "Unknown Topic"
-    
+    logger.info(type(state))
     script_scenes = []
     if state.script:
         if isinstance(state.script, dict):
@@ -59,24 +60,24 @@ def code_generator_node(state: AgentState) -> dict:
     # Construct prompt
     formatted_prompt = CODE_GENERATOR_PROMPT.replace("{{prompt}}", prompt).replace("{{scenes_data}}", scenes_data_str)
     
-    print("\n\n")
+    logger.info("\n\n")
     
-    print("formatted_prompt:", formatted_prompt)
+    logger.info(f"formatted_prompt: {formatted_prompt}")
     # Invoke LLM
     response = llm_service.invoke(formatted_prompt, CodeGenerationSchema)
-    
+    logger.info(response)
     # Log the response summary
-    print("--- Code Generator LLM Response ---")
+    logger.info("--- Code Generator LLM Response ---")
     if response is None:
-        print("Error: LLM returned None.")
+        logger.info("Error: LLM returned None.")
         summary = ""
         code = ""
     else:
         summary = getattr(response, "summary", "") if hasattr(response, "summary") else response.get("summary", "")
         code = getattr(response, "code", "") if hasattr(response, "code") else response.get("code", "")
         
-    print(summary)
-    print("-----------------------------------")
+    logger.info(summary)
+    logger.info("-----------------------------------")
     
     return {
         "manim_code": code,

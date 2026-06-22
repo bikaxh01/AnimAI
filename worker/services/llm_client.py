@@ -1,3 +1,4 @@
+from loguru import logger
 from langchain_fireworks import ChatFireworks
 from pydantic import BaseModel
 from typing import Type
@@ -14,9 +15,9 @@ class LLMService:
     def invoke(self, prompt: str, output_schema: Type[BaseModel]):
         structured_output = self.llm.with_structured_output(output_schema)
         try:
-            return structured_output.invoke(prompt)
+            return self.llm.invoke(prompt)
         except Exception as e:
-            print(f"LLM API Call Failed: {e}")
+            logger.error(f"LLM API Call Failed: {e}")
             return None
 
 

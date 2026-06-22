@@ -1,3 +1,4 @@
+from loguru import logger
 import subprocess
 import sys
 from pydantic import BaseModel
@@ -15,7 +16,7 @@ class Answer(BaseModel):
 
 def main():
 
-    print("Processing...\n")
+    logger.info("Processing...\n")
     topic  = "Make video on Binary search explain using go lang"
     res = llm_service.invoke(f"""
     YOU ARE A HELPFUL ASSISTANT. YOUR TASK IS TO GENERATE MANIM CODE FOR THE GIVEN TOPIC.
@@ -39,12 +40,12 @@ def main():
     className  = res.className
     summary = res.summary
     
-    print(f"\n\nSummary: {summary}")
-    print(f"\n \n Generated Code: {generated_code}")
+    logger.info(f"\n\nSummary: {summary}")
+    logger.info(f"\n \n Generated Code: {generated_code}")
      
 
 
-    print("Writing to file ")
+    logger.info("Writing to file ")
     Path("generated_video.py").write_text(
     generated_code,
     encoding="utf-8"
@@ -62,11 +63,11 @@ def main():
     text=True
     )
 
-    print(result.stdout)
-    print(result.stderr)
+    logger.info(result.stdout)
+    logger.info(result.stderr)
 
     if result.returncode != 0:
-        print("Render failed")
+        logger.info("Render failed")
 
 
 if __name__ == "__main__":

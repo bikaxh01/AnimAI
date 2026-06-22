@@ -1,3 +1,4 @@
+from loguru import logger
 from schema.state_schema import VideoStatus, AgentState
 from schema.storyboard.storyboard_schema import StoryboardSchema
 from prompts.storyboard_prompt import STORYBOARD_PROMPT
@@ -16,9 +17,9 @@ def storyboard_node(state: AgentState) -> dict:
     response = llm_service.invoke(formatted_prompt, StoryboardSchema)
     
     # 4. Log the response
-    print("--- Storyboard LLM Response ---")
-    print(response)
-    print("-------------------------------")
+    logger.info("--- Storyboard LLM Response ---")
+    logger.info(response)
+    logger.info("-------------------------------")
     
     # 5. Return updated state
     if response is None:

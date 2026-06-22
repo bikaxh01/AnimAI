@@ -1,3 +1,4 @@
+from loguru import logger
 from schema.state_schema import VideoStatus, AgentState
 from schema.script_writer.script_writer_schema import ScriptSchema
 from prompts.script_writer_prompt import SCRIPT_WRITER_PROMPT
@@ -17,9 +18,9 @@ def script_writer_node(state: AgentState) -> dict:
     response = llm_service.invoke(formatted_prompt, ScriptSchema)
     
     # 4. Log the response
-    print("--- Script Writer LLM Response ---")
-    print(response)
-    print("----------------------------------")
+    logger.info("--- Script Writer LLM Response ---")
+    logger.info(response)
+    logger.info("----------------------------------")
     
     # 5. Return updated state
     if response is None:

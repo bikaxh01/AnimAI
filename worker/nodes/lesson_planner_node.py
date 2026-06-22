@@ -1,3 +1,4 @@
+from loguru import logger
 from schema.state_schema import VideoStatus, AgentState
 from schema.lesson_planner.lesson_planner_schema import LessonPlannerSchema
 from prompts.lesson_planner_prompt import LESSON_PLANNER_PROMPT
@@ -18,9 +19,9 @@ def lesson_planner_node(state: AgentState) -> dict:
     response = llm_service.invoke(formatted_prompt, LessonPlannerSchema)
     
     # 4. Log the response
-    print("--- Lesson Planner LLM Response ---")
-    print(response)
-    print("-----------------------------------")
+    logger.info("--- Lesson Planner LLM Response ---")
+    logger.info(response)
+    logger.info("-----------------------------------")
     
     # 5. Return updated state
     if response is None:
