@@ -1,4 +1,7 @@
 import sys
+from dotenv import load_dotenv
+load_dotenv()
+
 from langgraph.graph import StateGraph,START,END
 from nodes.lesson_planner_node import lesson_planner_node
 from nodes.script_writter_node import script_writer_node
@@ -35,7 +38,7 @@ def main ():
   graph.add_edge(COMPILER_NODE, END)
 
   app = graph.compile()
-  res = app.invoke({"prompt": "Make video on binary search vs linear search in go lang"})
+  res = app.invoke({"prompt": "Explain caching in go lang in 50 sec video "},config={"configurable": {"thread_id": 154652}})
   logger.info(f"Final output state: {res}")
  
 
@@ -50,5 +53,5 @@ def single_node_test():
   logger.info(res)
 if __name__ == "__main__":
 
-    # main()
-    single_node_test()
+    main()
+    # single_node_test()

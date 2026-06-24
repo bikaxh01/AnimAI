@@ -65,6 +65,7 @@ def code_generator_node(state: AgentState) -> dict:
     logger.info(f"formatted_prompt: {formatted_prompt}")
     # Invoke LLM
     response = llm_service.invoke(formatted_prompt, CodeGenerationSchema)
+    # response = llm_service.invoke("write code to print the sum of 2 number in py", CodeGenerationSchema)
     logger.info(response)
     # Log the response summary
     logger.info("--- Code Generator LLM Response ---")
