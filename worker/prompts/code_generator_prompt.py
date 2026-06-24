@@ -182,8 +182,11 @@ If a step is vague after sanitization, use the simplest clear Manim implementati
 # File Structure — Non-Negotiable
 
     from manim import (
-        # ... full explicit import block from CRITICAL section above ...
+        # List ONLY the names actually used in your generated code.
+        # Scan your code before finalizing and remove any name not referenced.
+        Scene, Write, FadeIn, FadeOut, Create, ...  # ← filled in per generation
     )
+    
     import numpy as np
 
     class VideoLesson(Scene):
@@ -466,7 +469,49 @@ Rules:
     [ ] No extra Text in title zone or caption zone
 
 ---
+---
 
+# STEP 5 — AUDIT IMPORTS BEFORE FINALIZING
+
+After writing all scene code, scan every line of the file and collect the
+exact set of Manim names that appear. Then replace the wildcard import with
+an explicit import list containing only those names.
+
+## Required audit process:
+
+    SCAN for every Manim class/function/constant used:
+    - Animation classes: Write, FadeIn, FadeOut, Create, GrowArrow,
+      GrowFromCenter, DrawBorderThenFill, ReplacementTransform, FadeTransform,
+      Indicate, Flash, Circumscribe, AnimationGroup, LaggedStart, etc.
+    - Mobject classes: Text, MathTex, Tex, Line, Arrow, Rectangle,
+      RoundedRectangle, Circle, Ellipse, Dot, VGroup, Arc, Polygon, etc.
+    - Scene/config: Scene
+    - Constants: UP, DOWN, LEFT, RIGHT, ORIGIN, UL, UR, DL, DR,
+      WHITE, RED, BLUE, GREEN, YELLOW, ORANGE, PURPLE, etc.
+    - Run-time helpers: rate_functions (if used)
+
+    REPLACE the wildcard with only what was found:
+
+    # WRONG — imports everything, pollutes namespace
+    from manim import *
+
+    # CORRECT — import only what the code actually uses
+    from manim import (
+        Scene,
+        Write, FadeIn, FadeOut, Create, GrowArrow, GrowFromCenter,
+        Text, MathTex, Line, Arrow, Rectangle, Circle, VGroup,
+        UP, DOWN, LEFT, RIGHT, ORIGIN, WHITE, YELLOW,
+        # ... only names that appear in the code below
+    )
+
+## Audit rules:
+- Every name in the import list MUST appear at least once in the code.
+- Every Manim name used in the code MUST be in the import list.
+- Remove any name from the list that was in your initial draft but
+  got removed during code writing or simplification.
+- Constants like PINK, TEAL, DARK_BLUE must only be imported if used;
+  do not import the full color palette "just in case".
+- np (numpy) is imported separately — never in the manim import block.
 # Important Reminders
 
 - from manim import * is FORBIDDEN — explicit imports only

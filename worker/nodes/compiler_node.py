@@ -1,21 +1,30 @@
 from loguru import logger
 import os
+import subprocess
 from schema.state_schema import VideoStatus, AgentState
 
 def compiler_node(state: AgentState) -> dict:
-    code = state.manim_code if state.manim_code else ""
-    
-    filename = "generated_video.py"
-    
-    # Write the code to a .py file
-    with open(filename, "w", encoding="utf-8") as f:
-        f.write(code)
-        
     logger.info(f"--- Compiler Node ---")
-    logger.info(f"Saved Manim code to {filename} (compilation skipped for now).")
+    video_path = getattr(state, "video_path", "")
+    
+    if video_path:
+        logger.info(f"Compiling Manim code at {video_path}...")
+        try:
+            media_dir = os.path.join(os.path.dirname(video_path), "output")
+            subprocess.run(["manim", "-ph", video_path, "VideoLesson", "--media_dir", media_dir], check=True, capture_output=True, text=True)
+            logger.info("Compilation completed.")
+        except subprocess.CalledProcessError as e:
+            logger.error(f"Compilation failed: {e.stderr}")
+            return {
+                "has_error": True,
+                "compile_error": [f"Compilation Error:\n{e.stderr}"],
+                "status": VideoStatus.COMPILING.value
+            }
+    else:
+        logger.warning("No video_path found in state to compile.")
+        
     logger.info("---------------------")
     
     return {
-        "video_path": filename,
         "status": VideoStatus.COMPILING.value
     }

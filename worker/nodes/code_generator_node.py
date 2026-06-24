@@ -1,5 +1,7 @@
 from loguru import logger
 import json
+import os
+from datetime import datetime
 from schema.state_schema import VideoStatus, AgentState
 from schema.code_generator.code_generator_schema import CodeGenerationSchema
 from prompts.code_generator_prompt import CODE_GENERATOR_PROMPT
@@ -80,7 +82,19 @@ def code_generator_node(state: AgentState) -> dict:
     logger.info(summary)
     logger.info("-----------------------------------")
     
+    # Write code to codes directory with timestamp
+    file_path = ""
+    if code:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        dir_path = os.path.join("codes", timestamp)
+        os.makedirs(dir_path, exist_ok=True)
+        file_path = os.path.join(dir_path, "code.py")
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(code)
+        logger.info(f"Generated code written to {file_path}")
+    
     return {
         "manim_code": code,
+        "video_path": file_path,
         "status": VideoStatus.GENERATING_CODE.value
     }

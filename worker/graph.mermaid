@@ -1,0 +1,29 @@
+---
+config:
+  flowchart:
+    curve: linear
+---
+graph TD;
+        __start__([<p>__start__</p>]):::first
+        lesson_planner_node(lesson_planner_node)
+        script_writer_node(script_writer_node)
+        storyboard_node(storyboard_node)
+        code_generator_node(code_generator_node)
+        code_validate_node(code_validate_node)
+        debug_node(debug_node)
+        compiler_node(compiler_node)
+        __end__([<p>__end__</p>]):::last
+        __start__ --> lesson_planner_node;
+        code_generator_node --> code_validate_node;
+        code_validate_node -. &nbsp;end&nbsp; .-> __end__;
+        code_validate_node -.-> compiler_node;
+        code_validate_node -.-> debug_node;
+        compiler_node -. &nbsp;end&nbsp; .-> __end__;
+        compiler_node -.-> debug_node;
+        debug_node --> code_validate_node;
+        lesson_planner_node --> script_writer_node;
+        script_writer_node --> storyboard_node;
+        storyboard_node --> code_generator_node;
+        classDef default fill:#f2f0ff,line-height:1.2
+        classDef first fill-opacity:0
+        classDef last fill:#bfb6fc
