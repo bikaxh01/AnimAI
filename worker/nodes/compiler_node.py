@@ -10,8 +10,8 @@ def compiler_node(state: AgentState) -> dict:
     if video_path:
         logger.info(f"Compiling Manim code at {video_path}...")
         try:
-            media_dir = os.path.join(os.path.dirname(video_path), "output")
-            subprocess.run(["manim", "-ph", video_path, "VideoLesson", "--media_dir", media_dir], check=True, capture_output=True, text=True)
+            media_dir = os.path.dirname(video_path)
+            subprocess.run(["manim", "-qh", video_path, "VideoLesson", "--media_dir", media_dir], check=True, capture_output=True, text=True)
             logger.info("Compilation completed.")
         except subprocess.CalledProcessError as e:
             logger.error(f"Compilation failed: {e.stderr}")
