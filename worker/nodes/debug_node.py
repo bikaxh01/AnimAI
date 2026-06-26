@@ -12,10 +12,10 @@ def debug_node(state: AgentState) -> dict:
     
     error = state.compile_error[-1] if state.compile_error else "Unknown error"
     
-    video_path = getattr(state, "video_path", "")
+    code_path = getattr(state, "code_path", "")
     code = ""
-    if video_path and os.path.exists(video_path):
-        with open(video_path, "r", encoding="utf-8") as f:
+    if code_path and os.path.exists(code_path):
+        with open(code_path, "r", encoding="utf-8") as f:
             code = f.read()
     else:
         code = state.manim_code if state.manim_code else ""
@@ -32,10 +32,10 @@ def debug_node(state: AgentState) -> dict:
         summary = getattr(response, "summary", "") if hasattr(response, "summary") else response.get("summary", "")
         logger.info(f"Debugger summary: {summary}")
         
-    if new_code and video_path:
-        with open(video_path, "w", encoding="utf-8") as f:
+    if new_code and code_path:
+        with open(code_path, "w", encoding="utf-8") as f:
             f.write(new_code)
-        logger.info(f"Updated code written to {video_path}")
+        logger.info(f"Updated code written to {code_path}")
         
     return {
         "manim_code": new_code,

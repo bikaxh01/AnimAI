@@ -82,7 +82,7 @@ def main ():
   )
 
   app = graph.compile()
-  res = app.invoke({"prompt": "Explain k8s "},config={"configurable": {"thread_id": str(uuid.uuid4())}})
+  res = app.invoke({"prompt": "Explain the list in pythoon in short around 4-5 sec video only only 2 topic what is list . and how to append list"},config={"configurable": {"thread_id": str(uuid.uuid4())}})
   logger.info(f"Final output state: {res}")
   # mermaid_code = app.get_graph().draw_mermaid()
   # print(mermaid_code)

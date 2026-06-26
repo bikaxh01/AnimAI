@@ -5,23 +5,46 @@ from schema.state_schema import VideoStatus, AgentState
 
 def compiler_node(state: AgentState) -> dict:
     logger.info(f"--- Compiler Node ---")
-    video_path = getattr(state, "video_path", "")
+    code_path = getattr(state, "code_path", "")
     
-    if video_path:
-        logger.info(f"Compiling Manim code at {video_path}...")
+    if code_path:
+        logger.info(f"Compiling Manim code at {code_path}...")
         try:
-            media_dir = os.path.dirname(video_path)
-            subprocess.run(["manim", "-qh", video_path, "VideoLesson", "--media_dir", media_dir], check=True, capture_output=True, text=True)
+            media_dir = os.path.dirname(code_path)
+            process = subprocess.run(["manim", "-qh", code_path, "VideoLesson", "--media_dir", media_dir], check=False, capture_output=True, text=True)
+            
+            # Print command outputs
+            if process.stdout:
+                logger.info(f"Compiler Output:\n{process.stdout}")
+            if process.stderr:
+                logger.warning(f"Compiler Stderr:\n{process.stderr}")
+                
+            if process.returncode != 0:
+                logger.error(f"Compilation failed with return code {process.returncode}")
+                return {
+                    "has_error": True,
+                    "compile_error": [f"Compilation Error:\n{process.stderr}"],
+                    "status": VideoStatus.COMPILING.value
+                }
+                
             logger.info("Compilation completed.")
-        except subprocess.CalledProcessError as e:
-            logger.error(f"Compilation failed: {e.stderr}")
+            # Set the final video path
+            video_file_path = os.path.join(media_dir, "videos", "code", "1080p60", "VideoLesson.mp4").replace("\\", "/")
+            
+            logger.info("---------------------")
+            return {
+                "video_path": video_file_path,
+                "status": VideoStatus.COMPILING.value
+            }
+        except Exception as e:
+            logger.error(f"Compilation exception: {str(e)}")
             return {
                 "has_error": True,
-                "compile_error": [f"Compilation Error:\n{e.stderr}"],
+                "compile_error": [f"Compilation Exception:\n{str(e)}"],
                 "status": VideoStatus.COMPILING.value
             }
     else:
-        logger.warning("No video_path found in state to compile.")
+        logger.warning("No code_path found in state to compile.")
         
     logger.info("---------------------")
     

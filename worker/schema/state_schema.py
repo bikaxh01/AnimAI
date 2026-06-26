@@ -25,5 +25,6 @@ class AgentState(BaseModel):
     debug_attempts: int = 0
     has_error : bool = Field(default=False)
     video_path: str = ""
+    code_path: str = ""
     final_video_path: str = ""
     status: str = VideoStatus.PENDING.value

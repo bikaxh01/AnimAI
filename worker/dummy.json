@@ -1,0 +1,33 @@
+{
+  "lesson_plan": {
+    "title": "Kubernetes (K8s) Explained",
+    "description": "A beginner-friendly video series that demystifies Kubernetes.",
+    "concepts": [
+      "What is Kubernetes (K8s) — The Container Orchestrator",
+      "Major Cloud Providers Offering Managed Kubernetes Services"
+    ]
+  },
+  "script": {
+    "scenes": [
+      {
+        "title": "What is Kubernetes (K8s) — The Container Orchestrator",
+        "narration": "Picture this: you've containerized your application using Docker..."
+      },
+      {
+        "title": "Major Cloud Providers Offering Managed Kubernetes Services",
+        "narration": "Now, you could set up Kubernetes yourself on your own servers..."
+      }
+    ]
+  },
+  "storyboard": {
+    "scenes": [
+      {
+        "title": "What is Kubernetes (K8s) — The Container Orchestrator",
+        "visuals_steps": [
+          "Set camera background color to dark navy (#0A0F1A)."
+        ]
+      }
+    ]
+  },
+  "manim_code": "from manim import (\n    Scene,\n    Circle,\n    Dot,\n    Line,\n    GrowFromCenter,\n    Transform,\n    MoveAlongPath,\n    Rotating,\n    BLUE,\n    RIGHT,\n    linear,\n)\n\nclass PointMovingOnShapes(Scene):\n    def construct(self):\n        circle = Circle(radius=1, color=BLUE)\n        dot = Dot()\n        dot2 = dot.copy().shift(RIGHT)\n        self.add(dot)\n\n        line = Line([3, 0, 0], [5, 0, 0])\n        self.add(line)\n\n        self.play(GrowFromCenter(circle))\n        self.play(Transform(dot, dot2))\n        self.play(MoveAlongPath(dot, circle), run_time=2, rate_func=linear)\n        self.play(Rotating(dot, about_point=[2, 0, 0]), run_time=1.5)\n        self.wait()\n"
+}

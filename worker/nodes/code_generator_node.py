@@ -2,6 +2,7 @@ from loguru import logger
 import json
 import os
 from datetime import datetime
+from config.settings import settings
 from schema.state_schema import VideoStatus, AgentState
 from schema.code_generator.code_generator_schema import CodeGenerationSchema
 from prompts.code_generator_prompt import CODE_GENERATOR_PROMPT
@@ -10,6 +11,29 @@ from services.llm_client import LLMService
 llm_service = LLMService()
 
 def code_generator_node(state: AgentState) -> dict:
+    if settings.ENV == "DEV":
+        try:
+            with open("dummy.json", "r", encoding="utf-8") as f:
+                dummy_data = json.load(f)
+            code = dummy_data.get("manim_code", "")
+            file_path = ""
+            if code:
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                dir_path = os.path.join("codes", timestamp)
+                os.makedirs(dir_path, exist_ok=True)
+                file_path = os.path.join(dir_path, "code.py")
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write(code)
+                logger.info(f"Generated code written to {file_path}")
+            
+            return {
+                "manim_code": code,
+                "code_path": file_path,
+                "status": VideoStatus.GENERATING_CODE.value
+            }
+        except Exception as e:
+            logger.error(f"Failed to load dummy.json: {e}")
+
     prompt = state.prompt if state.prompt else "Unknown Topic"
     logger.info(type(state))
     script_scenes = []
@@ -95,6 +119,6 @@ def code_generator_node(state: AgentState) -> dict:
     
     return {
         "manim_code": code,
-        "video_path": file_path,
+        "code_path": file_path,
         "status": VideoStatus.GENERATING_CODE.value
     }

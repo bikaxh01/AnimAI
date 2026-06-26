@@ -1,4 +1,7 @@
+import os
+import json
 from loguru import logger
+from config.settings import settings
 from schema.state_schema import VideoStatus, AgentState
 from schema.lesson_planner.lesson_planner_schema import LessonPlannerSchema
 from prompts.lesson_planner_prompt import LESSON_PLANNER_PROMPT
@@ -7,6 +10,17 @@ from services.llm_client import LLMService
 llm_service = LLMService()
 
 def lesson_planner_node(state: AgentState) -> dict:
+    if settings.ENV == "DEV":
+        try:
+            with open("dummy.json", "r", encoding="utf-8") as f:
+                dummy_data = json.load(f)
+            return {
+                "lesson_plan": dummy_data.get("lesson_plan", {}),
+                "status": VideoStatus.PLANNING.value
+            }
+        except Exception as e:
+            logger.error(f"Failed to load dummy.json: {e}")
+
 
     
     # 1. Get the prompt from the state

@@ -1,4 +1,7 @@
+import os
+import json
 from loguru import logger
+from config.settings import settings
 from schema.state_schema import VideoStatus, AgentState
 from schema.storyboard.storyboard_schema import StoryboardSchema
 from prompts.storyboard_prompt import STORYBOARD_PROMPT
@@ -7,6 +10,17 @@ from services.llm_client import LLMService
 llm_service = LLMService()
 
 def storyboard_node(state: AgentState) -> dict:
+    if settings.ENV == "DEV":
+        try:
+            with open("dummy.json", "r", encoding="utf-8") as f:
+                dummy_data = json.load(f)
+            return {
+                "storyboard": dummy_data.get("storyboard", {}),
+                "status": VideoStatus.STORYBOARDING.value
+            }
+        except Exception as e:
+            logger.error(f"Failed to load dummy.json: {e}")
+
     # 1. Get script from the state
     script = state.script if state.script else {}
     
