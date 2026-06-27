@@ -13,7 +13,7 @@ from loguru import logger
 logger.add("logs/app_{time}.log", rotation="500 MB", level="INFO", enqueue=True)
 
 def main ():
-  project_id = "fb24f962-8d8a-4f9a-a3e8-bd0187bc8e7c"
+  project_id = "7c1c700a-f5f3-45af-a52b-f4e02b754fa4"
   
   # Fetch the project from the API
   project_data = project_service.get_by_id(project_id)

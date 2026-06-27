@@ -8,8 +8,12 @@ from services.llm_client import LLMService
 llm_service = LLMService()
 
 from langchain_core.runnables.config import RunnableConfig
+from services.project_service import project_service
+from schema.state_schema import VideoStatus
 def debug_node(state: AgentState, config: RunnableConfig) -> dict:
     thread_id = config.get("configurable", {}).get("thread_id")
+    if thread_id:
+        project_service.update(thread_id, {"status": VideoStatus.DEBUGGING.value})
     logger.info("--- Debugger Node ---")
     
     error = state.compile_error[-1] if state.compile_error else "Unknown error"

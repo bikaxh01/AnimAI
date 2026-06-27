@@ -10,8 +10,12 @@ from services.llm_client import LLMService
 llm_service = LLMService()
 
 from langchain_core.runnables.config import RunnableConfig
+from services.project_service import project_service
+from schema.state_schema import VideoStatus
 def script_writer_node(state: AgentState, config: RunnableConfig) -> dict:
     thread_id = config.get("configurable", {}).get("thread_id")
+    if thread_id:
+        project_service.update(thread_id, {"status": VideoStatus.WRITING_SCRIPT.value})
     if settings.ENV == "DEV":
         try:
             with open("dummy.json", "r", encoding="utf-8") as f:

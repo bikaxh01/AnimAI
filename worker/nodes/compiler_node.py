@@ -4,8 +4,12 @@ import subprocess
 from schema.state_schema import VideoStatus, AgentState
 
 from langchain_core.runnables.config import RunnableConfig
+from services.project_service import project_service
+from schema.state_schema import VideoStatus
 def compiler_node(state: AgentState, config: RunnableConfig) -> dict:
     thread_id = config.get("configurable", {}).get("thread_id")
+    if thread_id:
+        project_service.update(thread_id, {"status": VideoStatus.COMPILING.value})
     logger.info(f"--- Compiler Node ---")
     code_path = getattr(state, "code_path", "")
     

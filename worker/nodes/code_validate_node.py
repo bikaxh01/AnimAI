@@ -3,8 +3,12 @@ from schema.state_schema import AgentState
 from services.code_validator import validate_manim_code
 
 from langchain_core.runnables.config import RunnableConfig
+from services.project_service import project_service
+from schema.state_schema import VideoStatus
 def code_validate_node(state: AgentState, config: RunnableConfig) -> dict:
     thread_id = config.get("configurable", {}).get("thread_id")
+    if thread_id:
+        project_service.update(thread_id, {"status": VideoStatus.ANALYZING_CODE.value})
     code = state.manim_code if state.manim_code else ""
     
     logger.info("--- Code Validate Node ---")
