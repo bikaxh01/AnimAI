@@ -2,7 +2,9 @@ from loguru import logger
 from schema.state_schema import AgentState
 from services.code_validator import validate_manim_code
 
-def code_validate_node(state: AgentState) -> dict:
+from langchain_core.runnables.config import RunnableConfig
+def code_validate_node(state: AgentState, config: RunnableConfig) -> dict:
+    thread_id = config.get("configurable", {}).get("thread_id")
     code = state.manim_code if state.manim_code else ""
     
     logger.info("--- Code Validate Node ---")

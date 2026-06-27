@@ -3,7 +3,9 @@ import os
 from loguru import logger
 from schema.state_schema import AgentState
 
-def clean_up_node(state: AgentState) -> dict:
+from langchain_core.runnables.config import RunnableConfig
+def clean_up_node(state: AgentState, config: RunnableConfig) -> dict:
+    thread_id = config.get("configurable", {}).get("thread_id")
     logger.info("--- Clean Up Node ---")
     code_path = getattr(state, "code_path", "")
     

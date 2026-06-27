@@ -3,7 +3,9 @@ import os
 import subprocess
 from schema.state_schema import VideoStatus, AgentState
 
-def compiler_node(state: AgentState) -> dict:
+from langchain_core.runnables.config import RunnableConfig
+def compiler_node(state: AgentState, config: RunnableConfig) -> dict:
+    thread_id = config.get("configurable", {}).get("thread_id")
     logger.info(f"--- Compiler Node ---")
     code_path = getattr(state, "code_path", "")
     

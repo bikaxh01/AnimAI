@@ -10,7 +10,9 @@ from services.llm_client import LLMService
 
 llm_service = LLMService()
 
-def code_generator_node(state: AgentState) -> dict:
+from langchain_core.runnables.config import RunnableConfig
+def code_generator_node(state: AgentState, config: RunnableConfig) -> dict:
+    thread_id = config.get("configurable", {}).get("thread_id")
     if settings.ENV == "DEV":
         try:
             with open("dummy.json", "r", encoding="utf-8") as f:

@@ -9,5 +9,6 @@ class Settings(BaseSettings):
 
     OPENAI_API_KEY: str
     ENV: str = "PROD"
+    API_BASE_URL: str = "http://localhost:8000/api/v1"
 
 settings = Settings()

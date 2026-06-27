@@ -7,7 +7,9 @@ from services.llm_client import LLMService
 
 llm_service = LLMService()
 
-def debug_node(state: AgentState) -> dict:
+from langchain_core.runnables.config import RunnableConfig
+def debug_node(state: AgentState, config: RunnableConfig) -> dict:
+    thread_id = config.get("configurable", {}).get("thread_id")
     logger.info("--- Debugger Node ---")
     
     error = state.compile_error[-1] if state.compile_error else "Unknown error"
