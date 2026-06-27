@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from logging.config import fileConfig
 from sqlmodel import SQLModel
-from app.models.user import User
+from app.models.project import Project
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
