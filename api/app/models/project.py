@@ -11,6 +11,8 @@ class ProjectStatus(str, Enum):
     WRITING_SCRIPT = "writing_script"
     STORYBOARDING = "storyboarding"
     GENERATING_CODE = "generating_code"
+    ANALYZING_CODE = "analyzing_code"
+    DEBUGGING = "debugging"
     COMPILING = "compiling"
     COMPLETED = "completed"
     FAILED = "failed"

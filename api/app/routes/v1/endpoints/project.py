@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 from pydantic import BaseModel
@@ -9,6 +10,13 @@ router = APIRouter()
 
 class ProjectCreate(BaseModel):
     prompt: str
+
+class ProjectUpdate(BaseModel):
+    title: str | None = None
+    description: str | None = None
+    code_file: str | None = None
+    video_url: str | None = None
+    status: ProjectStatus | None = None
 
 @router.post("/", response_model=Project)
 def create_project(project_in: ProjectCreate, session: Session = Depends(get_session)):
@@ -33,4 +41,21 @@ def get_project(pid: uuid.UUID, session: Session = Depends(get_session)):
     project = session.get(Project, pid)
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
+    return project
+
+@router.patch("/{pid}", response_model=Project)
+def update_project(pid: uuid.UUID, project_in: ProjectUpdate, session: Session = Depends(get_session)):
+    project = session.get(Project, pid)
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+    
+    update_data = project_in.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(project, key, value)
+        
+    project.updated_at = datetime.now(timezone.utc)
+    
+    session.add(project)
+    session.commit()
+    session.refresh(project)
     return project

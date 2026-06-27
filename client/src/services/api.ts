@@ -11,7 +11,7 @@ export interface Project {
   code_file: string | null;
   video_url: string | null;
   prompt: string;
-  status: 'pending' | 'planning' | 'writing_script' | 'storyboarding' | 'generating_code' | 'compiling' | 'completed' | 'failed';
+  status: 'pending' | 'planning' | 'writing_script' | 'storyboarding' | 'generating_code' | 'analyzing_code' | 'debugging' | 'compiling' | 'completed' | 'failed';
   created_at: string;
   updated_at: string;
 }

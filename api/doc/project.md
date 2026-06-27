@@ -143,3 +143,64 @@ Returns the project object.
   "detail": "Project not found"
 }
 ```
+
+---
+
+## 4. Update Project
+
+Updates specific fields of a project.
+
+- **Endpoint:** `PATCH /api/v1/projects/{pid}`
+- **Content-Type:** `application/json`
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+| --------- | ---- | -------- | ----------- |
+| `pid` | string (UUID) | Yes | The unique identifier of the project to update. |
+
+### Request Body
+
+You only need to include the fields you want to update.
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `title` | string | No | The new title of the project. |
+| `description` | string | No | The new description of the project. |
+| `code_file` | string | No | The path/reference to the generated code. |
+| `video_url` | string | No | The URL of the generated animation video. |
+| `status` | string | No | The new status of the project (e.g. `generating_code`, `completed`, `failed`). |
+
+**Example Request:**
+```json
+{
+  "status": "storyboarding",
+  "title": "Bouncing Ball Setup"
+}
+```
+
+### Response
+
+Returns the updated project object.
+
+- **Status Code:** `200 OK`
+
+**Example Response:**
+```json
+{
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "title": "Bouncing Ball Setup",
+  "description": null,
+  "code_file": null,
+  "video_url": null,
+  "prompt": "Create an animation of a bouncing ball.",
+  "status": "storyboarding",
+  "created_at": "2026-06-27T11:40:00Z",
+  "updated_at": "2026-06-27T11:46:00Z"
+}
+```
+
+### Errors
+
+- **Status Code:** `404 Not Found`
+  - Returned if no project with the provided `pid` exists.

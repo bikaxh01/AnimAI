@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { api, type Project } from '../services/api';
 
-export type ProjectStatus = 
+export type ProjectStatus =
   | 'pending'
   | 'planning'
   | 'writing_script'
   | 'storyboarding'
   | 'generating_code'
+  | 'analyzing_code'
+  | 'debugging'
   | 'compiling'
   | 'completed'
   | 'failed';
@@ -31,6 +33,10 @@ const getStatusConfig = (status: string) => {
       return { label: 'Storyboarding', styles: 'bg-purple-500/10 text-purple-500 border-purple-500/20' };
     case 'generating_code':
       return { label: 'Generating Code', styles: 'bg-pink-500/10 text-pink-500 border-pink-500/20' };
+    case 'analyzing_code':
+      return { label: 'Analyzing Code', styles: 'bg-cyan-500/10 text-cyan-500 border-cyan-500/20' };
+    case 'debugging':
+      return { label: 'Debugging', styles: 'bg-orange-500/10 text-orange-500 border-orange-500/20' };
     case 'compiling':
       return { label: 'Compiling', styles: 'bg-amber-500/10 text-amber-500 border-amber-500/20' };
     default:
@@ -76,16 +82,16 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project: initialProjec
         </span>
       </div>
       <p className="text-muted-foreground text-sm mb-4 leading-relaxed line-clamp-2" title={description}>{description}</p>
-      
+
       {project.video_url ? (
         <div className="mt-4 rounded-lg overflow-hidden bg-black aspect-video flex items-center justify-center border border-border">
-           <video src={project.video_url} controls className="w-full h-full object-cover" />
+          <video src={project.video_url} controls className="w-full h-full object-cover" />
         </div>
       ) : (
         <div className="mt-4 rounded-lg overflow-hidden bg-muted/20 aspect-video flex items-center justify-center border border-border/50">
-           <span className="text-muted-foreground text-sm">
-             {project.status === 'failed' ? 'Generation failed' : 'No video available'}
-           </span>
+          <span className="text-muted-foreground text-sm">
+            {project.status === 'failed' ? 'Generation failed' : 'No video available'}
+          </span>
         </div>
       )}
     </div>
