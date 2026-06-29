@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { api, type Project } from '../services/api';
+import { Button } from './ui/button';
 
 export type ProjectStatus =
   | 'pending'
@@ -82,6 +83,14 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project: initialProjec
         </span>
       </div>
       <p className="text-muted-foreground text-sm mb-4 leading-relaxed line-clamp-2" title={description}>{description}</p>
+
+      {project.code_file && (
+        <div className="mb-4 flex">
+          <Button variant="outline" size="sm" className="ml-auto" onClick={() => window.open(project.code_file!, '_blank')}>
+            View Code
+          </Button>
+        </div>
+      )}
 
       {project.video_url ? (
         <div className="mt-4 rounded-lg overflow-hidden bg-black aspect-video flex items-center justify-center border border-border">
