@@ -34,7 +34,7 @@ export const api = {
   },
 
   listProjects: async (): Promise<Project[]> => {
-    const response = await fetch(`${API_BASE_URL}/projects`, {
+    const response = await fetch(`${API_BASE_URL}/projects/`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
