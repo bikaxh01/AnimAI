@@ -18,7 +18,7 @@ export interface Project {
 
 export const api = {
   createProject: async (data: CreateProjectPayload): Promise<Project> => {
-    const response = await fetch(`${API_BASE_URL}/projects`, {
+    const response = await fetch(`${API_BASE_URL}/projects/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ export const api = {
   },
 
   getProject: async (pid: string): Promise<Project> => {
-    const response = await fetch(`${API_BASE_URL}/projects/${pid}`, {
+    const response = await fetch(`${API_BASE_URL}/projects/${pid}/`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

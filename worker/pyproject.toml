@@ -16,4 +16,5 @@ dependencies = [
     "pydantic-settings>=2.14.2",
     "pyflakes>=3.4.0",
     "python-dotenv>=1.2.2",
+    "redis[hiredis]>=8.0.1",
 ]

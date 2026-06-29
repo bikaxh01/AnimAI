@@ -5,6 +5,9 @@ from sqlmodel import Session, select
 from pydantic import BaseModel
 from app.db import get_session
 from app.models.project import Project, ProjectStatus
+from app.config.settings import settings
+from app.services.redis_service import redis_service
+from loguru import logger
 
 router = APIRouter()
 
@@ -24,6 +27,15 @@ def create_project(project_in: ProjectCreate, session: Session = Depends(get_ses
     session.add(project)
     session.commit()
     session.refresh(project)
+    
+    payload = {
+        "id": str(project.id),
+        "status": project.status.value,
+        "prompt": project.prompt
+    }
+    logger.info(f"Project created {project.id} with payload {payload}")
+    redis_service.writestream(stream_name=settings.REDIS_STREAM_NAME, data=payload)
+    
     return project
 
 @router.get("/", response_model=list[Project])

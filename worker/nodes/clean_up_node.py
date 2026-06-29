@@ -18,7 +18,6 @@ def clean_up_node(state: AgentState, config: RunnableConfig) -> dict:
             lp = state.lesson_plan
             update_data["title"] = lp.get("title") if isinstance(lp, dict) else getattr(lp, "title", None)
             update_data["description"] = lp.get("description") if isinstance(lp, dict) else getattr(lp, "description", None)
-            
         code_file = getattr(state, "code_path", "")
         if code_file and os.path.exists(code_file):
             uploaded_code_url = cloudinary_service.upload(code_file, resource_type="raw")
